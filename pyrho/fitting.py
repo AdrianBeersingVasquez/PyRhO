@@ -1933,7 +1933,7 @@ def errCycle(p, Is, tons, toffs, nfs, RhO, Vs, phis):
 
 
 def fitModels(dataSet, nStates='3', params=None, postFitOpt=True, relaxFact=2, method=defMethod, postFitOptMethod=None, plot=True): # , verbose=config.verbose):
-    """Fit a list of models and compare thier goodness-of-fit metrics."""
+    """Fit a list of models and compare their goodness-of-fit metrics."""
 
     '''
     #TODO """Routine to fit as many models as possible and select between them according to some parsimony criterion"""
