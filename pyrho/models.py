@@ -833,7 +833,7 @@ class RhO_6Kstates(RhodopsinModel):
     """Class definition for the 6K-state model"""
 
     # Class attributes
-    nStates = 6  # '6K'
+    nStates = '6K'
     useAnalyticSoln = False
     s_0 = np.array([1, 0, 0, 0, 0, 0])  # [s1_0=1, s2_0=0, s3_0=0, s4_0=0, s5_0=0, s6_0=0] # array not necessary
     phi_0 = 0.0                         # Default initial flux
@@ -849,12 +849,19 @@ class RhO_6Kstates(RhodopsinModel):
                   'Gf0', 'k_f', 'Gb0', 'k_b', 'q', 'Go1', 'Go2',
                   'Ga3', 'Gd1', 'Gd2', 'Gb', 'E', 'v0', 'v1']  # List of model constants
 
-    connect = [[0, 0, 1, 1, 0, 1],  # s_1 --> s_i=1...6
-               [1, 0, 1, 0, 0, 0],  # s_2 -->
-               [0, 1, 0, 0, 0, 0],
-               [0, 0, 0, 0, 1, 0],
-               [0, 0, 0, 0, 0, 1],
-               [1, 0, 0, 1, 0, 0]]
+#    connect = [[0, 0, 1, 1, 0, 1],  # s_1 --> s_i=1...6
+#               [1, 0, 1, 0, 0, 0],  # s_2 -->
+#               [0, 1, 0, 0, 0, 0],
+#               [0, 0, 0, 0, 1, 0],
+#               [0, 0, 0, 0, 0, 1],
+#               [1, 0, 0, 1, 0, 0]]
+    
+    connect = [[0, 1, 0, 0, 0, 1],  # s_1 --> s_i=1...6
+               [0, 0, 1, 0, 0, 0],  # s_2 -->
+               [1, 1, 0, 0, 0, 0],
+               [1, 0, 0, 0, 0, 1],
+               [0, 0, 0, 1, 0, 0],
+               [1, 0, 0, 0, 1, 0]]
 
     equations = r"""
                 $$ \dot{C_1} = G_{d1}O_1 + G_{b}C_2 + G_{a3}O_2 - (G_{a1} + G_{f})(\phi)C_1 $$

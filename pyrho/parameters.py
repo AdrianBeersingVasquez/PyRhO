@@ -236,7 +236,7 @@ modelFits['6K']['ChR2'].add_many(
                 ('Gd1',     0.112,  True, 0.0,  1000, None),
                 ('Gd2',     0.0185, True, 0.0,  1000, None),
                 ('Ga3',     250,    True, 0.0,  500, None),
-                ('Gb',      40000,  True, 3400.0,  45000, None),
+                ('Gb',      40000,  True, 0.0,  45000, None),
                 ('E',       0,      True, -1000,1000, None),
                 ('v0',      43,     True, -1e15, 1e15,None),
                 ('v1',      17.1,   True, -1e15, 1e15,None))

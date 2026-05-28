@@ -1035,6 +1035,10 @@ def fit6Kstates(fluxSet, quickSet, run, vInd, params, method=defMethod):  # , ve
         nfs.append(I[offInd])
         #nfs.append(targetPC.I_peak_)
 
+#    if plotResult:
+#        lam1, lam2 = lams(pOffs)
+#        plotOffPhaseFits(toffs, Ioffs, pOffs, phis, nStates, fit6Koff, lam1, lam2, Gd=None)
+
 
     ### OFF PHASE
     ### 3a. OFF CURVE: Fit biexponential to off curve to find lambdas
@@ -1964,6 +1968,9 @@ def fitModels(dataSet, nStates='3', params=None, postFitOpt=True, relaxFact=2, m
 
     assert(len(nStates) == len(params))
     nModels = len(nStates)
+    
+    if plot:
+        plotFluxSetFits(fluxSet=dataSet['step'], nStates=nStates, params=params)
 
     fitParams = [None for nSt in nStates]
     miniObjs = [None for nSt in nStates]
@@ -2200,8 +2207,13 @@ def fitModel(dataSet, nStates='3', params=None, postFitOpt=True, relaxFact=2, me
     else:
         if config.verbose > 0:
             print('Recovery protocol not found, fixing initial value: ', end='')
-    params['Gr0'].vary = False
-    print(f"Gr0 = {params['Gr0'].value} ms**-1")
+
+    if nStates =='6K':
+        #params['Gr0'].vary = False
+        print('6K - test')
+    else:
+        params['Gr0'].vary = False
+        print(f"Gr0 = {params['Gr0'].value} ms**-1")
 
     # Process data for six-state model fitting
     if 'shortPulse' in dataSet:
@@ -2302,6 +2314,8 @@ def fitModel(dataSet, nStates='3', params=None, postFitOpt=True, relaxFact=2, me
     if plot:
         for trial in range(len(PCs)):
             plotFit(PCs[trial], nStates, orderedParams, fitRates=False, index=trial)  # , postPmin, fitRates=False, index=trial)
+        for trial in range(len(PCs)):
+            PCs[trial].plotStates()#(PCs[trial], nStates, orderedParams, fitRates=False, index=trial)  # , postPmin, fitRates=False, index=trial)
 
     exportName = f'fitted{nStates}sParams.pkl'
     with open(os.path.join(config.dDir, exportName), "wb") as fh:
