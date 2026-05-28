@@ -293,14 +293,14 @@ class PyRhOparameters(Parameters):
 
     #     return _pars
 
-    # def __setitem__(self, key, par):
+    def __setitem__(self, key, par):
     #     #if key not in self:
     #     #    if not valid_symbol_name(key):
     #     #        raise KeyError("'%s' is not a valid Parameters name" % key)
-    #     if par is not None and not isinstance(par, (Parameter, PyRhOparameter)):
-    #         raise ValueError("'%s' is not a Parameter" % par)
-    #     OrderedDict.__setitem__(self, key, par)
-    #     par.name = key
+        if par is not None and not isinstance(par, (Parameter, PyRhOparameter)):
+            raise ValueError("'%s' is not a Parameter" % par)
+        dict.__setitem__(self, key, par)
+        par.name = key
     #     #par._expr_eval = self._asteval
     #     #self._asteval.symtable[key] = par.value
 
@@ -778,7 +778,8 @@ class PyRhOobject(object):
         #    self.__dict__[p] = params[p].value #vars(self())[p]
         #for p in params.keys():
         #    setattr(self, p, params[p].value)
-        for name, value in params.valuesdict().items():
+        for name, par in params.items():
+            value = par.value
             setattr(self, name, value)
         #for name, value in params.items():
         #    setattr(self, name, value)

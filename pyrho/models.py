@@ -98,8 +98,9 @@ class RhodopsinModel(PyRhOobject):
         # 
         #else:
         #    self.states = np.vstack((np.empty([0, self.nStates]), s0))
-        assert len(s0) == self.nStates
-        self.states = np.vstack((np.empty([0, self.nStates]), s0))
+#        assert len(s0) == self.nStates
+#        self.states = np.vstack((np.empty([0, self.nStates]), s0))
+        self.states = np.vstack((np.empty([0, len(s0)]), s0))
         self.t = [0]
         self.pulseInd = np.empty([0, 2], dtype=int)  # Light on and off indexes for each pulse
         self.ssInf = []
