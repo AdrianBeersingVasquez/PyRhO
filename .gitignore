@@ -65,6 +65,10 @@ docs/_build/
 
 # Spyder configuration
 .spyderproject
+.spyproject
 
 # Pylint configuration
 pylintrc
+
+# VS Code settings
+.vscode/
