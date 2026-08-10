@@ -964,7 +964,7 @@ class RhO_6Kstates(RhodopsinModel):
         #print("Transition rates (phi={:.3g}): O1 <--[Gb={:.3g}]-- O2 <--[Ga2={:.3g}]-- C2".format(self.phi, self.Gb, self.Ga2))
 
     def solveStates(self, s_0, t, phi_t=None):
-        """Differential equations of the 6-state model to be solved by odeint"""
+        """Differential equations of the 6-state Kuhne model to be solved by odeint"""
         if phi_t is not None:
             self.setLight(float(phi_t(t)))
         C1, I1, O1, O2, I2, C2 = s_0  # Unpack state vector
