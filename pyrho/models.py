@@ -917,7 +917,7 @@ class RhO_6Kstates(RhodopsinModel):
             dI_1/dt = Ga1*C_1 - Go1*I_1                         : 1
             dO_1/dt = Go1*I_1 - Gd1*O_1                         : 1
             dO_2/dt = Go2*I_2 - (Gd2+Ga3)*O_2                   : 1
-            dI_2/dt = Ga2*C_2 - Go2*I_2                         : 1        
+            dI_2/dt = Ga2*C_2 - Go2*I_2                         : 1
 
             C_2 = 1 - C_1 - I_1 - O_1 - O_2 - I_2               : 1
             
@@ -934,6 +934,9 @@ class RhO_6Kstates(RhodopsinModel):
             f_phi = O_1+gam*O_2                                 : 1
             I     = g0*f_phi*f_v*(v-E)                          : amp
             '''
+
+    def __str__(self):
+        return f"Six-state Kuhne {self.rhoType}"
 
     def _calcGa1(self, phi):
         #return self.a10*(phi/self.phi0)
@@ -978,6 +981,11 @@ class RhO_6Kstates(RhodopsinModel):
         return np.array([dC1dt, dI1dt, dO1dt, dO2dt, dI2dt, dC2dt])
 
     def jacobian(self, s_0, t, phi_t=None):
+
+        # Update Jacobian as phi_t(t) changes over time - Check whether to include
+        if phi_t is not None:
+            self.setLight(float(phi_t(t)))
+
         return np.array([[-(self.Ga1+self.Gf),  0,          self.Gd1,   self.Ga3,               0,          self.Gb],
                          [self.Ga1,             -self.Go1,  0,          0,                      0,          0],
                          [0,                    self.Go1,   -self.Gd1,  0,                      0,          0],
