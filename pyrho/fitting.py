@@ -1125,6 +1125,7 @@ def fit6Kstates(fluxSet, quickSet, run, vInd, params, method=defMethod):  # , ve
             #Go_m1, Go = Go, ((tlag*Gd) - np.log(Gd/Go_m1))/tlag
         return Go
 
+    Gd1 = pOffs['Gd1'].value
     #if 'shortPulse' in dataSet: # Fit Go
     if quickSet.nRuns > 1:
         #from scipy.optimize import curve_fit
@@ -1159,7 +1160,6 @@ def fit6Kstates(fluxSet, quickSet, run, vInd, params, method=defMethod):  # , ve
             plt.show()
 
         # Solve iteratively Go = ((tlag*Gd) - np.log(Gd/Go))/tlag
-        Gd1 = pOffs['Gd1'].value
         Go = solveGo(tlag=popt[0], Gd=Gd1, Go0=1000, tol=1e-9)
         print('t_lag = {:.3g}; Gd = {:.3g} --> Go = {:.3g}'.format(popt[0], Gd1, Go))
 
@@ -1185,7 +1185,9 @@ def fit6Kstates(fluxSet, quickSet, run, vInd, params, method=defMethod):  # , ve
         copyParam(k, pOffs, iOnPs)
 
     # Set parameters from general rhodopsin analysis routines
-    for k in ['Go1', 'Go2', 'k1', 'k2', 'k3', 'k_f', 'k_b', 'gam', 'p', 'q', 'phi_m', 'g0', 'Gb', 'E', 'v0', 'v1']: #.extend(OffKeys):
+    for k in ['Go1', 'Go2', 'k1', 'k2', 'k_f',
+              'gam', 'p', 'q', 'phi_m', 'g0',
+              'Gb', 'E', 'v0', 'v1']: #.extend(OffKeys):
         copyParam(k, params, iOnPs)
 
     # Set parameters from short pulse calculations
@@ -1199,14 +1201,17 @@ def fit6Kstates(fluxSet, quickSet, run, vInd, params, method=defMethod):  # , ve
     if config.verbose > 2:
         print('Optimising ',end='')
 
+    print("Starting 6K on-phase fit...")
+    #onPmin = minimize(errOnPhase6K, iOnPs, args=(Ions,tons,RhO,Vs,phis), method=method)
     onPmin = minimize(errOnPhase, iOnPs, args=(Ions,tons,RhO,Vs,phis), method=method)
+    print("Finished 6K on-phase fit.")
     pOns = onPmin.params
 
     reportFit(onPmin, "On-phase fit report for the 6K-state model", method)
     
     if config.verbose > 0:
-        print('k1 = {}; k2 = {}; k_f = {}; k_b = {}'.format(pOns['k1'].value, pOns['k2'].value,
-                                                        pOns['k_f'].value, pOns['k_b'].value))
+        print('k1 = {}; k2 = {}; k_f = {}; Gb = {}'.format(pOns['k1'].value, pOns['k2'].value,
+                                                        pOns['k_f'].value, pOns['Gb'].value))
         print('gam = {}; phi_m = {}; p = {}; q = {}'.format(pOns['gam'].value, pOns['phi_m'].value,
                                                             pOns['p'].value, pOns['q'].value))
 
@@ -2025,7 +2030,7 @@ def fitModel(dataSet, nStates='3', params=None, postFitOpt=True, relaxFact=2, me
     if nStates == '3' or nStates == '4' or nStates == '6':
         nonOptParams = ['Gr0', 'E', 'v0', 'v1']
     elif nStates == '6K':
-        nonOptParams = ['E', 'v0', 'v1', 'Ga3']
+        nonOptParams = ['E', 'v0', 'v1'] # Ga3 in here?
 
     if nStates not in modelParams:
         print(f"Error in selecting model {nStates} - please choose from {list(modelParams)} states")
@@ -2199,7 +2204,7 @@ def fitModel(dataSet, nStates='3', params=None, postFitOpt=True, relaxFact=2, me
     ### Peak recovery: Gr, Gr0, Gr_dark, a6 ### This currently fits to the first flux
 
     ### 2. Fit exponential to peak recovery plots
-    if 'recovery' in dataSet and params['Gr0'].vary:
+    if nStates != '6K' and 'recovery' in dataSet and params['Gr0'].vary:
         if config.verbose > 0:
             print('Recovery protocol found, fitting dark recovery rate: ', end='')
         t_peaks, I_peaks, Ipeak0, Iss0 = getRecoveryPeaks(dataSet['recovery'])
@@ -2208,10 +2213,7 @@ def fitModel(dataSet, nStates='3', params=None, postFitOpt=True, relaxFact=2, me
         if config.verbose > 0:
             print('Recovery protocol not found, fixing initial value: ', end='')
 
-    if nStates =='6K':
-        #params['Gr0'].vary = False
-        print('6K - test')
-    else:
+    if nStates !='6K':
         params['Gr0'].vary = False
         print(f"Gr0 = {params['Gr0'].value} ms**-1")
 
@@ -2260,7 +2262,7 @@ def fitModel(dataSet, nStates='3', params=None, postFitOpt=True, relaxFact=2, me
         #nonOptParams.append(['Gd1', 'Gd2'])
     elif nStates == '6K':
         fittedParams, miniObj = fit6Kstates(setPC, quickSet, runInd, vIndm70, fitParams, method)  # , verbose)
-        constrainedParams = ['Gd1', 'Gd2', 'Gf0', 'Go1', 'Go2', 'Gb']
+        constrainedParams = ['Gd1', 'Gd2', 'Gf0', 'Ga3', 'Go1', 'Go2', 'Gb']
         #constrainedParams = ['Go1', 'Go2', 'Gf0', 'Gb0']
         #nonOptParams.append(['Gd1', 'Gd2'])
     else:
