@@ -846,8 +846,8 @@ class RhO_6Kstates(RhodopsinModel):
     constRates = ['Go1', 'Go2', 'Ga3', 'Gd1', 'Gd2', 'Gb']
     constLabels = ['$G_{o1}$', '$G_{o2}$', '$G_{a3}$', '$G_{d1}$', '$G_{d2}$', '$G_{b}$']
 
-    paramsList = ['g0', 'gam', 'phi_m', 'k1', 'k2', 'k3', 'p',
-                  'Gf0', 'k_f', 'Gb0', 'k_b', 'q', 'Go1', 'Go2',
+    paramsList = ['g0', 'gam', 'phi_m', 'k1', 'k2', 'p',
+                  'Gf0', 'k_f', 'q', 'Go1', 'Go2',
                   'Ga3', 'Gd1', 'Gd2', 'Gb', 'E', 'v0', 'v1']  # List of model constants
 
 #    connect = [[0, 0, 1, 1, 0, 1],  # s_1 --> s_i=1...6
@@ -897,9 +897,6 @@ class RhO_6Kstates(RhodopsinModel):
             H_q = Theta*((phi**q)/(phi**q+phi_m**q))            : 1
             Ga1 = k1*H_p                                        : second**-1
             Ga2 = k2*H_p                                        : second**-1
-            Ga3 = k3*H_p                                        : second**-1
-            Gf = k_f*H_q + Gf0                                  : second**-1
-            Gb = k_b*H_q + Gb0                                  : second**-1
             f_v = (1-exp(-(v-E)/v0))/((v-E)/v1)                 : 1
             f_phi = O_1+gam*O_2                                 : 1
             I = g0*f_phi*f_v*(v-E)                              : amp
@@ -919,9 +916,8 @@ class RhO_6Kstates(RhodopsinModel):
             H_q   = Theta*((phi(t)**q)/(phi(t)**q+phi_m**q))    : 1
             Ga1   = k1*H_p                                      : second**-1
             Ga2   = k2*H_p                                      : second**-1
-            Ga3   = k3*H_p                                      : second**-1
             Gf    = k_f*H_q + Gf0                               : second**-1
-            Gb    = k_b*H_q + Gb0                               : second**-1
+
             f_v   = (1-exp(-(v-E)/v0))/((v-E)/v1)               : 1
             f_phi = O_1+gam*O_2                                 : 1
             I     = g0*f_phi*f_v*(v-E)                          : amp
