@@ -878,9 +878,7 @@ class RhO_6Kstates(RhodopsinModel):
                 
                 $$ G_{a1}(\phi) = k_{1} \frac{\phi^p}{\phi^p + \phi_m^p} $$
                 $$ G_{a2}(\phi) = k_{2} \frac{\phi^p}{\phi^p + \phi_m^p} $$
-                $$ G_{a3}(\phi) = k_{3} \frac{\phi^p}{\phi^p + \phi_m^p} $$
-                $$ G_{f}(\phi)  = k_{f} \frac{\phi^q}{\phi^q + \phi_m^q} + G_{f0} $$
-                $$ G_{b}(\phi)  = k_{b} \frac{\phi^q}{\phi^q + \phi_m^q} + G_{b0} $$
+                $$ G_{f}(\phi)  = k_{f} \frac{\phi^q}{\phi^q + \phi_m^q} $$
                 
                 $$$$
                 
@@ -904,6 +902,7 @@ class RhO_6Kstates(RhodopsinModel):
             
             Ga1 = k1*H_p                                        : second**-1
             Ga2 = k2*H_p                                        : second**-1
+            Gf = k_f*H_q                                  : second**-1
             
             f_v = (1-exp(-(v-E)/v0))/((v-E)/v1)                 : 1
             f_phi = O_1+gam*O_2                                 : 1
@@ -958,10 +957,12 @@ class RhO_6Kstates(RhodopsinModel):
         if config.verbose > 1:
             self.dispRates()
 
-    def dispRates(self): # This needs rechecking
+    def dispRates(self):
         """Print photosensitive transition rates"""
-        print("Transition rates (phi={:.3g}): C1 --[Ga1={:.3g}]--> O1 --[Gf={:.3g}]--> O2".format(self.phi, self.Ga1, self.Gf))
-        #print("Transition rates (phi={:.3g}): O1 <--[Gb={:.3g}]-- O2 <--[Ga2={:.3g}]-- C2".format(self.phi, self.Gb, self.Ga2))
+        print("Transition rates (phi={:.3g}): "
+              "C1 --[Ga1={:.3g}]--> I1 --[Go1={:.3g}]--> O1; "
+              "C1 --[Gf={:.3g}]--> C2 --[Ga2={:.3g}]--> I2 --[Go2={:.3g}]--> O2"
+              .format(self.phi, self.Ga1, self.Go1, self.Gf, self.Ga2, self.Go2))
 
     def solveStates(self, s_0, t, phi_t=None):
         """Differential equations of the 6-state Kuhne model to be solved by odeint"""
@@ -992,6 +993,7 @@ class RhO_6Kstates(RhodopsinModel):
         """
         return np.zeros((6, 6))
 
+    # With constant Gb and Ga3
     def calcSteadyState(self, phi):
         self.setLight(phi)
         Ga1 = self.Ga1
