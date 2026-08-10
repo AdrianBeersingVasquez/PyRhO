@@ -102,7 +102,9 @@ modelLabels = {
     'k_f': 'k_f', 'k_b': 'k_b', 'q': 'q',
     'Gd1': r'G_{d1}', 'Gd2': r'G_{d2}',
     'Go1': r'G_{o1}', 'Go2': r'G_{o2}',
-    'phi': r'\phi', 'v': 'v'
+    'phi': r'\phi', 'v': 'v',
+    'Ga3': r'G_{a3}',
+    'Gb': r'G_b',
 }
 
 modelUnits = {
@@ -116,7 +118,9 @@ modelUnits = {
     'Gd1': ms**-1, 'Gd2': ms**-1,
     'Go1': ms**-1, 'Go2': ms**-1,
     'E': mV, 'v0': mV, 'v1': mV,
-    'phi': mm**-2*second**-1, 'v': mV
+    'phi': mm**-2*second**-1, 'v': mV,
+    'Ga3': ms**-1,
+    'Gb': ms**-1,
 }
 
 #paramUnits
@@ -131,7 +135,9 @@ unitLabels = {
     'Gd1': 'ms^-1', 'Gd2': 'ms^-1',
     'Go1': 'ms^-1', 'Go2': 'ms^-1',
     'E': 'mV', 'v0': 'mV', 'v1': 'mV',
-    'phi': 'ph./mm^2/s', 'v': 'mV'
+    'phi': 'ph./mm^2/s', 'v': 'mV',
+    'Ga3': 'ms^-1',
+    'Gb': 'ms^-1',
 }
 
 
