@@ -833,7 +833,8 @@ class RhO_6Kstates(RhodopsinModel):
     """Class definition for the 6K-state model"""
 
     # Class attributes
-    nStates = 6
+    nStates = '6K'
+    modelName = '6K'
     useAnalyticSoln = False
     s_0 = np.array([1, 0, 0, 0, 0, 0])  # [s1_0=1, s2_0=0, s3_0=0, s4_0=0, s5_0=0, s6_0=0] # array not necessary
     phi_0 = 0.0                         # Default initial flux
@@ -1026,14 +1027,14 @@ models = {
 
 def selectModel(nStates):
     """Model selection function."""
-    if int(nStates) == 3 or nStates == 'three':
+    if nStates == '6K':
+        return RhO_6Kstates()
+    elif int(nStates) == 3 or nStates == 'three':
         return RhO_3states()
     elif int(nStates) == 4 or nStates == 'four':
         return RhO_4states()
     elif int(nStates) == 6 or nStates == 'six':
         return RhO_6states()
-    elif nStates == '6K':
-        return RhO_6Kstates()
     else:
         print("Error in selecting model - please choose from 3, 4 or 6 states")
         raise NotImplementedError(nStates)
