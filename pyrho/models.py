@@ -865,12 +865,12 @@ class RhO_6Kstates(RhodopsinModel):
                [1, 0, 0, 0, 1, 0]]
 
     equations = r"""
-                $$ \dot{C_1} = G_{d1}O_1 + G_{b}C_2 + G_{a3}O_2 - (G_{a1} + G_{f})(\phi)C_1 $$
+                $$ \dot{C_1} = G_{d1}O_1 + G_{b}C_2 + G_{a3}O_2 - G_{a1}(\phi)C_1 - G_{f}(\phi)C_1 $$
                 $$ \dot{I_1} = G_{a1}(\phi)C_1 - G_{o1}I_1 $$
                 $$ \dot{O_1} = G_{o1}I_1 - G_{d1}O_1 $$
                 $$ \dot{O_2} = G_{o2}I_2 - (G_{d2} + G_{a3})O_2 $$
                 $$ \dot{I_2} = G_{a2}(\phi)C_2 - G_{o2}I_2 $$
-                $$ \dot{C_2} = G_{d2}O_2 + G_{f}(\phi)C1 - (G_{b} + G_{a2}(\phi))C_2 $$
+                $$ \dot{C_2} = G_{d2}O_2 + G_{f}(\phi)C_1 - G_{b}C_2 - G_{a2}(\phi)C_2 $$
 
                 $$ C_1 + I_1 + O_1 + O_2 + I_2 + C_2 = 1 $$
                 
