@@ -131,6 +131,32 @@ def errOnPhase(p, Ions, tons, RhO, Vs, phis):
     return np.r_[[(Ions[i] - calcOnPhase(p, tons[i], RhO, Vs[i], phis[i])) / Ions[i][-1]
                   for i in range(len(Ions))]]
 
+def errOnPhase6K(p, Ions, tons, RhO, Vs, phis):
+    residuals = []
+
+    for i in range(len(Ions)):
+        I_exp = Ions[i]
+        I_model = calcOnPhase(p, tons[i], RhO, Vs[i], phis[i])
+
+        peak_scale = abs(I_exp.min())
+        if peak_scale == 0:
+            peak_scale = 1.0
+
+        r = (I_exp - I_model) / peak_scale
+
+        # Weight early activation/peak more strongly
+        early = tons[i] <= 100
+        r[early] *= 5
+
+        peak_idx = np.argmin(I_exp)
+        lo = max(0, peak_idx - 20)
+        hi = min(len(r), peak_idx + 20)
+        r[lo:hi] *= 10
+
+        residuals.append(r)
+
+    return np.r_[residuals]
+
 
 def reportFit(minResult, description, method):
 
